@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wildgoose</groupId>
+    <artifactId>MovieRecommendSystem</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>recommender</module>
+    </modules>
+
+    <!--  声明子项目公用的配置属性  -->
+    <properties>
+        <spark.version>3.0.2</spark.version>
+        <scala.version>2.12.13</scala.version>
+        <scala.tools.version>2.12</scala.tools.version>
+        <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <casbah.version>3.1.1</casbah.version>
+        <mongo-spark.version>2.4.2</mongo-spark.version>
+        <elasticserach.version>7.12.0</elasticserach.version>
+        <jblas.version>1.2.5</jblas.version>
+        <jedis.version>3.6.0</jedis.version>
+        <kafka.version>2.6.1</kafka.version>
+        <mongo.version>3.12.7</mongo.version>
+    </properties>
+
+    <!--  声明并引入子项目共有的依赖  -->
+    <dependencies>
+        <!--  所有子项目日志框架  -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!--  具体日志实现  -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--  仅声明不引入子项目共有的依赖，如果子项目需要此依赖，那么子项目需要声明  -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--  声明构建信息  -->
+    <build>
+        <!--  声明并引入子项目共有的插件【插件就是附着的Maven各个生命周期的具体实现】 -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <!--  所有的编译都依照JDK1.8  -->
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <!--  仅声明子项目共有的插件，如果子项目需要此依赖，那么子项目需要声明  -->
+        <pluginManagement>
+            <plugins>
+                <!--  该插件用于将Scala代码编译成class文件  -->
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>3.4.6</version>
+                    <!-- 声明绑定到maven的compile阶段  -->
+                    <goals>
+                        <goal>compile</goal>
+                        <goal>testCompile</goal>
+                    </goals>
+                </plugin>
+
+                <!--  用于打包的插件  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
